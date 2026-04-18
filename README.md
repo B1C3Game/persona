@@ -1,5 +1,38 @@
-# Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+# personas-demo
+
+**Link to demo:** [https://b1c3game.github.io/persona/](https://b1c3game.github.io/persona/)
+
+A proof-of-concept Vue 3 app for enterprise persona visualization, based on research into enterprise persona schema, auditability, and UI/UX best practices.
+
+## Research
+See [RESEARCH.md](./RESEARCH.md) for background, schema rationale, and design decisions.
+
+- Progressive disclosure UI (expand/minimize details)
+- Compact, readable layout with minimal spacing
+- Emoji-labeled, left-aligned headings
+- Evidence/audit trail and contextual persona data
+- Easily extensible for more persona features
+
+
+## Getting Started
+
+1. Install dependencies:
+	```sh
+	npm install
+	```
+2. Run the development server:
+	```sh
+	npm run dev
+	```
+
+## Features
+- Persona schema with auditability and evidence
+- Modern, compact UI for enterprise use
+- Easily customizable headings and sections
+
+## Status
+This is a proof-of-concept. Ready for further development or integration.
+
+**0
