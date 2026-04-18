@@ -1,0 +1,230 @@
+<template>
+  <div class="persona-card">
+    <div class="persona-header">
+      <h2>{{ persona.meta.name }}</h2>
+      <div class="persona-role">{{ persona.meta.role }}</div>
+      <div class="persona-context">{{ persona.meta.context }}</div>
+    </div>
+    <div class="persona-core-pattern persona-voice">
+      {{ persona.identity.corePattern }}
+    </div>
+    <div class="persona-emojis">
+      <span v-if="emojis.length">{{ emojis.join(' ') }}</span>
+    </div>
+    <button v-if="layer === 0" @click="layer = 1">Expand details &gt;</button>
+    <div v-if="layer >= 1" class="persona-details">
+      <section>
+        <h3><span class="heading-emoji">🧠</span> Behaviors</h3>
+        <ul>
+          <li v-for="b in persona.mentalization.behaviors.slice(0,2)" :key="b.observable">
+            {{ b.observable }} <span v-if="b.context">({{ b.context }})</span>
+          </li>
+        </ul>
+
+      <section>
+        <h3 class="left-heading"><span class="heading-emoji">⚡</span> Key Tension</h3>
+        <div v-if="persona.mentalization.tensions && persona.mentalization.tensions.length" style="margin-bottom:0.05em; text-align:left;">
+          {{ persona.mentalization.tensions[0].need1 }} vs. {{ persona.mentalization.tensions[0].need2 }}:
+          {{ persona.mentalization.tensions[0].resolution }}
+        </div>
+      </section>
+      <section>
+        <h3 class="left-heading"><span class="heading-emoji">🔥</span> Top Friction Point</h3>
+        <div v-if="persona.mentalization.frictionPoints && persona.mentalization.frictionPoints.length" style="text-align:left;">
+          {{ persona.mentalization.frictionPoints[0].moment }}: {{ persona.mentalization.frictionPoints[0].friction }}
+        </div>
+      </section>
+
+      </section>
+      <button v-if="layer === 1" @click="layer = 2">Deep dive &gt;</button>
+      <button v-if="layer > 0" @click="layer = 0" class="minimize-btn">Minimize</button>
+    </div>
+    <div v-if="layer === 2" class="persona-deep-dive">
+      <button @click="layer = 1" class="minimize-btn">Minimize deep dive</button>
+      <section>
+        <h3><span class="heading-emoji">🧠</span> All Behaviors</h3>
+        <ul>
+          <li v-for="b in persona.mentalization.behaviors" :key="b.observable + b.context">
+            {{ b.observable }} <span v-if="b.context">({{ b.context }})</span>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3><span class="heading-emoji">🎯</span> All Goals</h3>
+        <ul>
+          <li v-for="g in persona.mentalization.goals" :key="g.goal">
+            {{ g.goal }} (Priority: {{ g.priority }}, Context: {{ g.context }})
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3><span class="heading-emoji">⚖️</span> All Decision Criteria</h3>
+        <ul>
+          <li v-for="c in persona.mentalization.decisionCriteria" :key="c.criterion">
+            {{ c.criterion }} (Weight: {{ c.weight }}, Context: {{ c.context }})
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3><span class="heading-emoji">🔀</span> Contextual Variations</h3>
+        <ul>
+          <li><strong>Under Pressure:</strong> {{ persona.mentalization.contextualVariations.underPressure }}</li>
+          <li><strong>With Support:</strong> {{ persona.mentalization.contextualVariations.withSupport }}</li>
+          <li><strong>First Time:</strong> {{ persona.mentalization.contextualVariations.firstTime }}</li>
+          <li><strong>Expert:</strong> {{ persona.mentalization.contextualVariations.expert }}</li>
+        </ul>
+      </section>
+      <section>
+        <h3><span class="heading-emoji">📑</span> Evidence & Sources</h3>
+        <ul>
+          <li v-for="s in persona.evidence.sources" :key="'source-' + s">Source: {{ s }}</li>
+          <li><span style="color: #444; font-size: 0.85rem;">Validated: {{ persona.evidence.validated ? 'Yes' : 'No' }}</span></li>
+          <li v-for="o in persona.evidence.observations" :key="'obs-' + o">Observation: {{ o }}</li>
+          <li v-for="f in persona.evidence.wouldFalsify" :key="'falsify-' + f">Would falsify: {{ f }}</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'PersonaReveal',
+  props: {
+    persona: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      layer: 0
+    }
+  },
+  computed: {
+    emojis() {
+      // Example: derive emojis from persona cues (customize as needed)
+      const cues = [];
+      if (this.persona.identity.corePattern && this.persona.identity.corePattern.match(/efficien/gi)) cues.push('⚡');
+      if (this.persona.identity.corePattern && this.persona.identity.corePattern.match(/productiv/gi)) cues.push('🎯');
+      return cues;
+    }
+  }
+}
+</script>
+
+<style scoped>
+.persona-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 420px;
+  margin: 2rem auto;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-size: 0.89rem;
+}
+.persona-header {
+  margin-bottom: 0.5rem;
+}
+section {
+  margin-bottom: 0.18rem;
+}
+section h3 {
+  margin-bottom: 0.15em;
+}
+section {
+  margin-bottom: 0.18rem;
+}
+.persona-context {
+  font-size: 0.85rem;
+  color: #888;
+}
+.persona-core-pattern {
+  margin: 0.1rem 0 0.1rem 0;
+  font-size: 0.95rem;
+}
+.persona-voice {
+  font-style: italic;
+  font-weight: 300;
+  color: #444;
+  letter-spacing: 0.01em;
+  font-size: 0.89rem;
+  margin: 0.05em 0;
+}
+.persona-emojis {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+button {
+  margin: 1rem 0;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  border: none;
+  background: #2d72d2;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #1a4e8a;
+}
+section {
+  margin-bottom: 0.12rem;
+}
+p, br {
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+  text-align: left;
+}
+section h3 {
+  margin-bottom: 0.09em;
+}
+ul {
+  text-align: left;
+  margin: 0.1em 0 0.1em 1.2em;
+  padding: 0;
+}
+li {
+  margin-bottom: 0.05em;
+  line-height: 1.15;
+}
+li {
+  text-align: left;
+  font-size: 0.85rem;
+}
+.minimize-btn {
+  margin-left: 1em;
+  background: #eee;
+  color: #333;
+  font-weight: normal;
+  border: 1px solid #bbb;
+}
+.minimize-btn:hover {
+  background: #ddd;
+}
+.heading-emoji {
+  display: inline-block;
+  width: 1.5em;
+  text-align: center;
+  margin-right: 0.2em;
+}
+h3 {
+  text-align: left;
+  padding-left: 1.2em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+.left-heading {
+  text-align: left !important;
+  padding-left: 1.2em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+</style>
