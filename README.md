@@ -34,7 +34,3 @@ See [RESEARCH.md](./RESEARCH.md) for background, schema rationale, and design de
 
 ## Status
 This is a proof-of-concept. Ready for further development or integration.
-
-**0
-
-
